@@ -27,6 +27,20 @@ class Miethoehe(Rule):
             )
         ]
 
+class MieterIdentPruefung(Rule): 
+    _beschreibung: str = "Antragsteller oder Haushaltsmitglied muss als Mieter im Mietvertrag aufgeführt sein."
+
+    def run(
+        self, antrag: WohngeldAntrag, nachweise: list[Nachweis]
+    ) -> list[A.Anforderung]:
+        
+        neue_anforderung = A.MieterIdentPruefung( 
+            gruende=["Standardprüfung der Mietvertragsdetails und Antragsberechtigung"],
+            person_name=antrag.antragsteller.get_full_name()
+        )
+        
+        return [neue_anforderung]
+
 
 class Rente(Rule):
     _beschreibung = "Wenn der Erwerbsstatus Rentner ist oder Einkommen aus Rente vorliegt muss ein Nachweis eingereicht werden"
@@ -58,3 +72,4 @@ class Rente(Rule):
                 )
 
         return anforderungen
+
